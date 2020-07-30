@@ -1,0 +1,148 @@
+body{
+  margin: 0;
+  display: grid;
+  grid-template-areas: 
+  "head cont"
+  "side cont"
+  "foot foot";
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 10vh 90vh 15vh;
+}
+header{
+  grid-area: head;
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 40px;
+  background-color: rgba(226,231,226,1);
+}
+aside{
+  grid-area: side;
+  padding-left: 40px;
+  display: flex !important;
+  flex-flow: column wrap;
+  user-select: none;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.5em;
+  background-color: rgba(226,231,226,1);
+}
+aside > a{
+  margin-bottom: 10px;
+}
+footer{
+  grid-area: foot;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.5em;
+  text-align: center;
+  background-color: rgba(0,106,131,1);
+  padding: 20px;
+  color: white;
+}
+#content{
+  grid-area: cont;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
+.grid-card{
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 5px;
+  width: 250px;
+  height: 350px;
+  display: grid;
+  grid-template-areas: 
+  "head"
+  "image"
+  "text"
+  "foot";
+  grid-template-rows: 2fr 4fr 4fr 2fr;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+  margin: 20px;
+  text-overflow: clip;
+  font-family: 'Raleway', sans-serif;
+}
+.simple-card{
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 5px;
+  width: 250px;
+  height: 350px;
+  display: block;
+  overflow: hidden;
+  margin: 20px;
+  text-overflow: clip;
+  font-family: 'Raleway', sans-serif;
+}
+.card-head{
+  grid-area: head;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 30px;
+  overflow: hidden;
+  text-overflow: clip;
+  background-color: rgba(254, 203, 186, 1);
+  padding-bottom: 10px;
+}
+.card-image{
+  grid-area: image;
+  margin: auto;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: clip;
+}
+.card-text{
+  grid-area: text;
+  text-align: center;
+  vertical-align: middle;
+  padding: 20px;
+  overflow: hidden;
+  text-overflow: clip;
+  margin-bottom: 10px;
+}
+.card-foot{
+  grid-area: foot;
+  text-align: center;
+  vertical-align: middle;
+  padding: 20px;
+  text-overflow: clip;
+  background-color: rgba(109, 179, 190, 1);
+}
+.card-foot > button{
+  background-color: aliceblue;
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+  padding: 7px;
+}
+.card-button{
+  display: block;
+  background-color: white;
+  border: 1px solid #28a745;
+  color: #28a745;
+  border-radius: 2px;
+  padding: 7px;
+  transition: .5s;
+  margin: 5px auto;
+}
+.card-button:hover{
+  background-color: #28a745;
+  color: white;
+}
+.card-label{
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+.card-input{
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+.center-image{
+    display: block;
+    margin: auto;
+}
+
+

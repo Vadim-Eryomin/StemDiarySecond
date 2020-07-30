@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Стем</title>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+    <script src="js/libs/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+
+</head>
+<body>
+<header>
+    <img src="img/noroot.png">
+</header>
+<aside id="side">
+    <a @click.prevent="profile" class="abcd">Профиль</a>
+    <a @click.prevent="select('Basket')" class="abcd">Корзина</a>
+    <a @click.prevent="select('Timetable')" class="abcd">Расписание</a>
+    <a @click.prevent="select('Shop')" class="abcd">Магазин</a>
+    <a @click.prevent="select('Admin')" class="abcd">Админка</a>
+</aside>
+
+<div id="content">
+    <template v-if="auth === false">
+<!--        <script>-->
+<!--            (function(){-->
+<!--                let cookie = getCookie('loginAndPassword');-->
+<!--                if(cookie) {-->
+<!--                    cookie = cookie ^ 10101010;-->
+<!--                    auth = true;-->
+<!--                }-->
+<!--            })();-->
+<!--        </script>-->
+        <!-- hasn't cookie--->
+        <template v-if="auth === false">
+            <form id="loginForm" @submit.prevent>
+                <simple-card>
+                    <card-input key="login" name="login" label="Логин"></card-input>
+                    <card-input key="password" name="password" label="Пароль"></card-input>
+                    <card-button @click.native="form('auth', 'loginForm', ['login', 'password']);" label="Войти"></card-button>
+                </simple-card>
+            </form>
+
+        </template>
+    </template>
+    <template v-else>
+
+    </template>
+    <simple-card>
+        <card-image  key="img" src="img/noroot.png"></card-image>
+        <card-input  key="name" name="name" label="Имя" type="text" value=""></card-input>
+        <card-input  key="surname" name="surname" label="Фамилия" type="text" value=""></card-input>
+        <card-input  key="login" name="login" label="Логин" type="text" value=""></card-input>
+        <card-input  key="password" name="password" label="Пароль" type="text" value=""></card-input>
+        <card-input  key="imgSrc" name="img" label="Аватар" type="text" value=""></card-input>
+        <card-button key="button" label="Изменить" type="submit"></card-button>
+    </simple-card>
+</div>
+
+<footer>
+    Крутой ЦОИ Стем <br>
+    Звони: x-xxx-xxx-xx-xx
+</footer>
+
+
+<script src="js/image-resize.js"></script>
+<script src="js/content.js"></script>
+</body>
+</html>
