@@ -1,7 +1,43 @@
 //import all data
-import('./components/simple-card.js')
-.then(import('./connection.js'))
-.then(import('./components/app.js'))
-.then(import('./components/side.js'))
-.then(import('./libs/cookie.js'))
-.then(module => console.log(module));
+import card from './components/card.js'
+import input from './components/input.js';
+import image from './components/image.js';
+import label from './components/label.js'
+import button from './components/button.js';
+import getCookie from './libs/cookie.js';
+import side from './components/apps/side.js';
+import content from './components/apps/app.js';
+
+//load autostart scripts
+import {} from './libs/connection.js';
+
+(function(){
+    let login = getCookie('login');
+    let password = getCookie('password')
+    console.log(content.isAuth);
+    if(login) {
+        fetch('auth', {
+            method: 'POST',
+            body: JSON.stringify({
+                login: login,
+                password: password
+            })
+        })
+        .then(data => data.json())
+        .then(data => {
+            if(data.auth === true){
+                content.isAuth = true;
+                content.login = data.login;
+                content.password = data.password;
+                content.img = data.img;
+                content.name = data.name;
+                content.surname = data.surname;
+                content.site = 'profile';
+            }
+            else{
+                console.log('try again');
+            }
+        });
+    }
+})();
+

@@ -1,4 +1,4 @@
-export let comp0 = Vue.component('simple-card', {
+export default Vue.component('simple-card', {
     template:
     `<div>
         <template>
@@ -30,31 +30,4 @@ export let comp0 = Vue.component('simple-card', {
     props:{
         card: { reqired: false }
     }
-});
-
-export let comp1 = Vue.component('card-input', {
-    template: 
-    `<div>
-        <template>
-            <label class="card-label">{{label}}</label>
-            <input :type="type" :name="name" :key="name" :value="value" class="card-input">
-        </template>
-    </div>`,
-    props:['name', 'label', 'type', 'value']
-});
-
-export let comp2 = Vue.component('card-button', {
-    template:
-    `<div style="">
-        <button :type="type" class="card-button">{{label}}</button>
-    </div>`,
-    props:['label', 'type']
-});
-
-export let comp3 = Vue.component('card-image', {
-    template:
-    `<div>
-        <img :src="src" class="resized-image center-image">
-    </div>`,
-    props:['src']
 });

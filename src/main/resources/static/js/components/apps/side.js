@@ -1,4 +1,4 @@
-export let side = new Vue({
+export default new Vue({
     el: '#side',
     methods: {
         profile: () => {

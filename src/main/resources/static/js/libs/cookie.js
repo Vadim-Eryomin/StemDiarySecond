@@ -1,5 +1,5 @@
 //функция для работы с куки с сайта learn.javascript.com
-export function getCookie(name) {
+export default function(name) {
   let matches = document.cookie.match(new RegExp(
     "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
   ));

@@ -8,7 +8,7 @@
     <script src="js/libs/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
-
+    <script type="module" src="js/content.js"></script>
 </head>
 <body>
 <header>
@@ -16,47 +16,55 @@
 </header>
 <aside id="side">
     <a @click.prevent="profile" class="abcd">Профиль</a>
-    <a @click.prevent="select('Basket')" class="abcd">Корзина</a>
-    <a @click.prevent="select('Timetable')" class="abcd">Расписание</a>
-    <a @click.prevent="select('Shop')" class="abcd">Магазин</a>
-    <a @click.prevent="select('Admin')" class="abcd">Админка</a>
+    <a @click.prevent="basket" class="abcd">Корзина</a>
+    <a @click.prevent="timetable" class="abcd">Расписание</a>
+    <a @click.prevent="shop" class="abcd">Магазин</a>
+    <a @click.prevent="admin" class="abcd">Админка</a>
 </aside>
 
 <div id="content">
-    <template v-if="auth === false">
-<!--        <script>-->
-<!--            (function(){-->
-<!--                let cookie = getCookie('loginAndPassword');-->
-<!--                if(cookie) {-->
-<!--                    cookie = cookie ^ 10101010;-->
-<!--                    auth = true;-->
-<!--                }-->
-<!--            })();-->
-<!--        </script>-->
-        <!-- hasn't cookie--->
-        <template v-if="auth === false">
-            <form id="loginForm" @submit.prevent>
-                <simple-card>
-                    <card-input key="login" name="login" label="Логин"></card-input>
-                    <card-input key="password" name="password" label="Пароль"></card-input>
-                    <card-button @click.native="form('auth', 'loginForm', ['login', 'password']);" label="Войти"></card-button>
-                </simple-card>
-            </form>
-
-        </template>
+    <template v-if="isAuth === false">
+        <form id="loginForm" @submit.prevent>
+            <simple-card key="loginCard">
+                <card-input key="login" name="login" label="Логин"></card-input>
+                <card-input key="password" name="password" label="Пароль" type="password"></card-input>
+                <card-button @click.native="auth" label="Войти"></card-button>
+            </simple-card>
+        </form>
     </template>
     <template v-else>
+        <template v-if="site==='profile'">
+            <simple-card key="profile">
+                <card-image key="icon" :src="img" style="margin: 10px auto  "></card-image>
+                <card-label key="name" :label="'Имя: ' + name"></card-label>
+                <card-label key="surname" :label="'Фамилия: ' + surname"></card-label>
+            </simple-card>
+        </template>
+        <template v-if="site==='shop'">
 
+        </template>
+        <template v-if="site==='basket'">
+
+        </template>
+        <template v-if="site==='timetable'">
+
+        </template>
+        <template v-if="site==='admin'">
+
+        </template>
+        <template v-if="site==='adminprofile'">
+            <simple-card>
+                <card-image  key="img" src="img/noroot.png"></card-image>
+                <card-input  key="name" name="name" label="Имя" type="text" value=""></card-input>
+                <card-input  key="surname" name="surname" label="Фамилия" type="text" value=""></card-input>
+                <card-input  key="login" name="login" label="Логин" type="text" value=""></card-input>
+                <card-input  key="password" name="password" label="Пароль" type="text" value=""></card-input>
+                <card-input  key="imgSrc" name="img" label="Аватар" type="text" value=""></card-input>
+                <card-button key="button" label="Изменить" type="submit"></card-button>
+            </simple-card>
+        </template>
     </template>
-    <simple-card>
-        <card-image  key="img" src="img/noroot.png"></card-image>
-        <card-input  key="name" name="name" label="Имя" type="text" value=""></card-input>
-        <card-input  key="surname" name="surname" label="Фамилия" type="text" value=""></card-input>
-        <card-input  key="login" name="login" label="Логин" type="text" value=""></card-input>
-        <card-input  key="password" name="password" label="Пароль" type="text" value=""></card-input>
-        <card-input  key="imgSrc" name="img" label="Аватар" type="text" value=""></card-input>
-        <card-button key="button" label="Изменить" type="submit"></card-button>
-    </simple-card>
+
 </div>
 
 <footer>
@@ -66,6 +74,6 @@
 
 
 <script src="js/image-resize.js"></script>
-<script src="js/content.js"></script>
+
 </body>
 </html>

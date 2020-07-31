@@ -1,5 +1,6 @@
 package ru.coistem.StemDiary.Controllers;
 
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import ru.coistem.StemDiary.Database;
 import ru.coistem.StemDiary.JSONer;
@@ -15,14 +16,18 @@ public class FetchPageController {
     public String profile() throws SQLException {
         ResultSet set = Database.query("SELECT * FROM login");
         set.next();
-        return JSONer.toJSON(set, new String[]{"login", "password"});
+        return JSONer.toJSONString(set, new String[]{"login", "password"});
     }
 
     @PostMapping("/auth")
-    public boolean auth(@RequestBody String data) throws SQLException {
+    public String auth(@RequestBody String data) throws SQLException {
         String login = getFromJSONString(data, "login");
         String password = getFromJSONString(data, "password");
-        ResultSet set = Database.query("SELECT * FROM login WHERE login = '" + login + "' and password = '" + password + "'");
-        return set.next();
+        ResultSet set = Database.query("select * from (select * from login where login='"+login+"' and password='"+password+"') as L join profile on L.id = profile.id");
+        if (set.next()){
+            JSONObject obj = JSONer.toJSON(set, new String[]{"login", "password", "name", "surname", "img"});
+            return obj.put("auth", true).toString();
+        }
+        return new JSONObject().put("auth", false).toString();
     }
 }
