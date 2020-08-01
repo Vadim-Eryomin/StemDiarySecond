@@ -14,12 +14,15 @@ public class Database {
         connection = DriverManager.getConnection(connector, login, password);
     }
 
-    public static ResultSet query(String query) throws SQLException {
+    public static ResultSet query(String query) {
         ResultSet set = null;
         try {
             Statement statement = connection.createStatement();
             set = statement.executeQuery(query);
-        } catch (PSQLException ignore){}
+        } catch (PSQLException ignore) {
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         return set;
     }

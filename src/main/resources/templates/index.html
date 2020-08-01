@@ -41,10 +41,26 @@
             </simple-card>
         </template>
         <template v-if="site==='shop'">
-
+            <template v-for="card in data">
+                <simple-card :key="card.id">
+                    <card-label key="title" :label="card.title"></card-label>
+                    <card-image key="img" :src="card.img"></card-image>
+                    <card-label key="about" :label="card.about"></card-label>
+                    <card-label key="quantity" :label="'Количество: ' + card.quantity"></card-label>
+                    <card-button key="buy" :label="card.cost + '$'"></card-button>
+                </simple-card>
+            </template>
         </template>
         <template v-if="site==='basket'">
-
+            <template v-for="card in data">
+                <simple-card :key="card.id + card.status">
+                    <card-label key="title" :label="card.title"></card-label>
+                    <card-image key="img" :src="card.img"></card-image>
+                    <card-label key="about" :label="card.about"></card-label>
+                    <card-label key="quantity" :label="'Количество: ' + card.quantity"></card-label>
+                    <card-label key="status" :label="'Статус: ' + card.status"></card-label>
+                </simple-card>
+            </template>
         </template>
         <template v-if="site==='timetable'">
 

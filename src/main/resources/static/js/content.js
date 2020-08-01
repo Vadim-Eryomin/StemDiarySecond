@@ -14,7 +14,7 @@ import {} from './libs/connection.js';
 (function(){
     let login = getCookie('login');
     let password = getCookie('password')
-    console.log(content.isAuth);
+    window.content = content;
     if(login) {
         fetch('auth', {
             method: 'POST',
@@ -26,6 +26,7 @@ import {} from './libs/connection.js';
         .then(data => data.json())
         .then(data => {
             if(data.auth === true){
+                console.log(data);
                 content.isAuth = true;
                 content.login = data.login;
                 content.password = data.password;
@@ -33,6 +34,7 @@ import {} from './libs/connection.js';
                 content.name = data.name;
                 content.surname = data.surname;
                 content.site = 'profile';
+                content.id = parseInt(data.id);
             }
             else{
                 console.log('try again');

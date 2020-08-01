@@ -39,7 +39,7 @@ public class WebSocketController {
     }
     public static String getFromJSONString(String json, String need){
         JSONObject obj = new JSONObject(json);
-        return obj.has(need) ? obj.getString(need) : null;
+        return obj.has(need) ? (obj.get(need) + "") : null;
     }
 
 

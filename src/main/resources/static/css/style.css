@@ -40,6 +40,7 @@ footer{
 #content{
   grid-area: cont;
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
   align-items: center;
   overflow: auto;
@@ -63,6 +64,7 @@ footer{
   font-family: 'Raleway', sans-serif;
 }
 .simple-card{
+  display: block;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 5px;
   width: 250px;
@@ -133,7 +135,7 @@ footer{
 .card-label{
   display: block;
   text-align: center;
-  margin: auto;
+  margin: 10px auto;
 }
 .card-input{
   display: block;

@@ -7,7 +7,9 @@ export default new Vue({
         password: '',
         img: '',
         name: '',
-        surname: ''
+        surname: '',
+        id: 0,
+        data: {}
     },
     methods: {
         form: function(method, formId, fields){
@@ -42,6 +44,7 @@ export default new Vue({
                 if(data.auth === true){
                     console.log('auth!');
                     console.log(data);
+                    this.id = data.id;
                     this.login = data.login;
                     this.password = data.password;
                     this.img = data.img;
@@ -52,7 +55,6 @@ export default new Vue({
                     document.cookie = "password="+(data.password);
                 }
             })
-
         }
     }
 })
