@@ -9,7 +9,8 @@ export default new Vue({
         name: '',
         surname: '',
         id: 0,
-        data: {}
+        data: {},
+        coins: 0
     },
     methods: {
         form: function(method, formId, fields){
@@ -55,6 +56,40 @@ export default new Vue({
                     document.cookie = "password="+(data.password);
                 }
             })
+        },
+        buy: (id, cost) => {
+            fetch("buy", {method: 'POST', body: JSON.stringify({
+                login: content.login,
+                password: content.password,
+                coins: content.coins,
+                id: content.id,
+                cost: cost,
+                buy: id
+                })
+            })
+            .then(data => data.json())
+            .then(data => console.log(data));
+        },
+        confirm: (id) => {
+            fetch("confirm", {method: 'POST', body: JSON.stringify({
+                login: content.login,
+                password: content.password,
+                id: content.id,
+                confirm: id
+                })
+            })
+            .then(setTimeout(window.side.basket(), 1000));
+        },
+        decline: (id) => {
+            fetch("decline", {method: 'POST', body: JSON.stringify({
+                login: content.login,
+                password: content.password,
+                id: content.id,
+                decline: id
+                })
+            })
+            .then(setTimeout(window.side.basket(), 1000));
         }
+
     }
 })

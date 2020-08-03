@@ -15,6 +15,7 @@ import {} from './libs/connection.js';
     let login = getCookie('login');
     let password = getCookie('password')
     window.content = content;
+    window.side = side;
     if(login) {
         fetch('auth', {
             method: 'POST',
@@ -34,6 +35,7 @@ import {} from './libs/connection.js';
                 content.name = data.name;
                 content.surname = data.surname;
                 content.site = 'profile';
+                content.coins = data.coins;
                 content.id = parseInt(data.id);
             }
             else{

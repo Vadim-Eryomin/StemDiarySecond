@@ -15,6 +15,7 @@ export default new Vue({
                 window.content.name = data.name;
                 window.content.surname = data.surname;
                 window.content.isAuth = true;
+                window.content.coins = data.coins;
             })
             .then(data => window.content.site = 'profile')
             .then((data) => console.log(data.login));
