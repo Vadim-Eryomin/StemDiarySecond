@@ -126,6 +126,33 @@ export default new Vue({
                })
             })
             .then(window.side.timetable());
+        },
+        homework: function(course, lesson){
+            console.log(course + '  ' + lesson);
+            fetch("homework", {
+                method: 'POST',
+                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id, 'lesson': lesson, 'course': course})
+            })
+            .then(data => data.json())
+            .then(data => this.data = data)
+            .then(data => this.site = 'homework')
+            .then(data => console.log(this));
+        },
+        sethomework: (id, lesson, course) => {
+            let form = document.getElementById(id);
+            fetch("sethomework", {
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                    'login': window.content.login,
+                    'password': window.content.password,
+                    'id': window.content.id,
+                    'lesson': lesson,
+                    'course': course,
+                    'homework': form['homework'].value
+               })
+            })
+            .then(window.side.timetable());
         }
     }
 })

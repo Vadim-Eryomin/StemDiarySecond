@@ -15,6 +15,7 @@ public class Database {
     }
 
     public static ResultSet query(String query) {
+        System.out.println(query);
         ResultSet set = null;
         try {
             Statement statement = connection.createStatement();
@@ -23,7 +24,6 @@ public class Database {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         return set;
     }
 }

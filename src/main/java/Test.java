@@ -1,12 +1,14 @@
+import java.net.*;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 
 public class Test {
-    public static void main(String[] args) {
-        GregorianCalendar calendar = new GregorianCalendar();
-        GregorianCalendar calendar1 = new GregorianCalendar();
-        calendar1.add(Calendar.WEEK_OF_YEAR, 1);
-        System.out.println(calendar1.getTime().getTime() - calendar.getTime().getTime());
+    public static void main(String[] args) throws UnknownHostException, SocketException {
+        try(final DatagramSocket socket = new DatagramSocket()){
+            socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
 
+            System.out.println(socket);
+        }
     }
 }

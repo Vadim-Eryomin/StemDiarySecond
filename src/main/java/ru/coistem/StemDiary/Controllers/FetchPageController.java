@@ -142,6 +142,47 @@ public class FetchPageController {
         return null;
     }
 
+    @PostMapping("/homework")
+    public String homework(@RequestBody String data) throws SQLException {
+        if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
+            String id = getFromJSONString(data, "id");
+            ResultSet role = Database.query("SELECT admin, teacher FROM role WHERE id = " + id);
+
+            String date = getFromJSONString(data, "date");
+            String firstDate = (String) JSONer.nextToJSON(Database.query("SELECT firstdate FROM course WHERE id = " + getFromJSONString(data, "course")), new String[]{"firstdate"}).get("firstdate");
+            if (date == null)  date = (Long.parseLong(firstDate) + Math.ceil((new Date().getTime() - Long.parseLong((String) firstDate)) / 604800000.0) * 604800000) + "";
+
+            String query = "SELECT id, homework, course " +
+                    "FROM lesson " +
+                    "WHERE lesson.date = " + date + " and course = " + getFromJSONString(data, "course");
+            ResultSet set = Database.query(query);
+            System.out.println("homework:" + query);
+            if (set.next()) {
+                JSONObject obj = JSONer.toJSON(set, new String[]{"id", "homework", "course"});
+                return obj.toString();
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("/sethomework")
+    public String sethomework(@RequestBody String data) throws SQLException {
+        System.out.println(data);
+        if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
+            String id = getFromJSONString(data, "id");
+            ResultSet role = Database.query("SELECT admin, teacher FROM role WHERE id = " + id);
+
+            String date = getFromJSONString(data, "date");
+            String firstDate = (String) JSONer.nextToJSON(Database.query("SELECT firstdate FROM course WHERE id = " + getFromJSONString(data, "course")), new String[]{"firstdate"}).get("firstdate");
+            if (date == null)  date = (Long.parseLong(firstDate) + Math.ceil((new Date().getTime() - Long.parseLong((String) firstDate)) / 604800000.0) * 604800000) + "";
+
+            Database.query("UPDATE lesson " +
+                    "SET homework = '" + getFromJSONString(data, "homework") + "' " +
+                    "WHERE id = " + getFromJSONString(data, "lesson"));
+        }
+        return null;
+    }
+
     @PostMapping("/basket")
     public String basket(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
