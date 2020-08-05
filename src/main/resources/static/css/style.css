@@ -128,6 +128,25 @@ footer{
   padding: 7px;
   transition: .5s;
   margin: 5px auto;
+  position: absolute;
+  bottom: 10px;
+  left: 0px;
+  right: 0px;
+}
+
+.second-card-button{
+  display: block;
+  background-color: white;
+  border: 1px solid #28a745;
+  color: #28a745;
+  border-radius: 2px;
+  padding: 7px;
+  transition: .5s;
+  margin: 5px auto;
+  position: absolute;
+  bottom: 50px;
+  left: 0px;
+  right: 0px;
 }
 .card-button:hover{
   background-color: #28a745;

@@ -21,6 +21,13 @@ public class JSONer {
         return object;
     }
 
+    public static JSONObject nextToJSON(ResultSet set, String[] props) throws SQLException {
+        set.next();
+        JSONObject object = new JSONObject();
+        for (String s : props) object.put(s, set.getString(s));
+        return object;
+    }
+
     public static JSONArray toJSONList(ResultSet set, String[] props) throws SQLException {
         JSONArray array = new JSONArray();
         while (set.next()){

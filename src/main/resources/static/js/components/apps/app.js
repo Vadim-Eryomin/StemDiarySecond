@@ -10,7 +10,8 @@ export default new Vue({
         surname: '',
         id: 0,
         data: {},
-        coins: 0
+        coins: 0,
+        pupils: {}
     },
     methods: {
         form: function(method, formId, fields){
@@ -78,7 +79,7 @@ export default new Vue({
                 confirm: id
                 })
             })
-            .then(setTimeout(window.side.basket(), 1000));
+            .then(setTimeout(window.side.basket, 100));
         },
         decline: (id) => {
             fetch("decline", {method: 'POST', body: JSON.stringify({
@@ -88,8 +89,43 @@ export default new Vue({
                 decline: id
                 })
             })
-            .then(setTimeout(window.side.basket(), 1000));
+            .then(setTimeout(window.side.basket, 100));
+        },
+        lesson: function(course){
+            fetch("lesson", {
+                method: 'POST',
+                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id, 'course': course})
+            })
+            .then(data => data.json())
+            .then(data => this.data = data)
+            .then(data => this.site = 'lesson');
+        },
+        mark: function(course, lesson){
+            fetch("mark", {
+                method: 'POST',
+                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id, 'course': course, 'lesson': lesson})
+            })
+            .then(data => data.json())
+            .then(data => this.data = data)
+            .then(data => this.site = 'mark')
+            .then(data => console.log(this));
+        },
+        setmark: (id, lesson, pupil) => {
+            let form = document.getElementById(id);
+            fetch("setmark", {
+                method: 'POST',
+                body: JSON.stringify(
+                    {'login': window.content.login,
+                     'password': window.content.password,
+                     'id': window.content.id,
+                     'lesson': lesson,
+                     'a': form['a'].value,
+                     'b': form['b'].value,
+                     'c': form['c'].value,
+                     'pupil': pupil
+               })
+            })
+            .then(window.side.timetable());
         }
-
     }
 })

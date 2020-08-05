@@ -47,7 +47,7 @@
                     <card-image key="img" :src="card.img"></card-image>
                     <card-label key="about" :label="card.about"></card-label>
                     <card-label key="quantity" :label="'Количество: ' + card.quantity"></card-label>
-                    <card-button key="buy" @click.prevent.native="buy(card.id, card.cost)" :label="card.cost + '$'" style="position: absolute; bottom: 10px; left: 0px; right: 0px;"></card-button>
+                    <card-button key="buy" @click.prevent.native="buy(card.id, card.cost)" :label="card.cost + '$'"></card-button>
                 </simple-card>
             </template>
         </template>
@@ -60,13 +60,65 @@
                     <card-label key="quantity" :label="'Количество: ' + card.quantity"></card-label>
                     <card-label key="status" :label="'Статус: ' + card.status"></card-label>
                     <card-button v-if="card.status === 'not'" key="confirm" :label="'Подтвердить'" @click.prevent.native="confirm(card.id)"></card-button>
-                    <card-button v-if="card.status === 'not'" style="top: 30px" key="cancel" :label="'Отменить'" @click.prevent.native="decline(card.id)"></card-button>
-
+                    <card-button v-if="card.status === 'not'" class="second-card-button" key="cancel" :label="'Отменить'" @click.prevent.native="decline(card.id)"></card-button>
                 </simple-card>
             </template>
         </template>
         <template v-if="site==='timetable'">
+            <template v-for="card in data">
+                <simple-card :key="card.id">
+                    <card-label key="title" :label="card.course"></card-label>
+                    <card-image key="img" :src="card.courseimg"></card-image>
+                    <card-button key="confirm" label="К уроку" @click.prevent.native="lesson(card.id)"></card-button>
+                </simple-card>
+            </template>
+        </template>
+        <template v-if="site==='lesson'">
+            <simple-card key="homework">
+                <card-label key="homeworktitle" label="ДЗ"></card-label>
+                <card-label key="homework" :label="data.homework"></card-label>
+            </simple-card>
+            <simple-card key="course">
+                <card-label key="coursenametitle" :label="data.coursename"></card-label>
+                <card-image key="img" :src="data.courseimg"></card-image>
+            </simple-card>
+            <simple-card key="marks">
+                <card-label key="pupilstitle" label="Ученики"></card-label>
+                <template v-for="pupil in data.pupils">
+                    <card-label key="marks" :label="pupil.name + ' ' + pupil.surname"></card-label>
+                </template>
+                <card-button label="Оценки" @click.prevent.native="mark(data.course, data.lesson)"></card-button>
+            </simple-card>
+        </template>
+        <template v-if="site==='mark'">
+            <template v-for="mark in data">
+                <simple-card :key="mark.pupil">
+                    <card-label key="name" :label="mark.name + ' ' + mark.surname"></card-label>
+                    <form :id="mark.pupil">
+                        Оценка:
+                        <input type="radio" v-model="mark.a" value="1" name="a"> 1
+                        <input type="radio" v-model="mark.a" value="2" name="a"> 2
+                        <input type="radio" v-model="mark.a" value="3" name="a"> 3
+                        <input type="radio" v-model="mark.a" value="4" name="a"> 4
+                        <input type="radio" v-model="mark.a" value="5" name="a"> 5 <br>
+                        Оценка:
+                        <input type="radio" v-model="mark.b" value="1" name="b"> 1
+                        <input type="radio" v-model="mark.b" value="2" name="b"> 2
+                        <input type="radio" v-model="mark.b" value="3" name="b"> 3
+                        <input type="radio" v-model="mark.b" value="4" name="b"> 4
+                        <input type="radio" v-model="mark.b" value="5" name="b"> 5 <br>
+                        Оценка:
+                        <input type="radio" v-model="mark.c" value="1" name="c"> 1
+                        <input type="radio" v-model="mark.c" value="2" name="c"> 2
+                        <input type="radio" v-model="mark.c" value="3" name="c"> 3
+                        <input type="radio" v-model="mark.c" value="4" name="c"> 4
+                        <input type="radio" v-model="mark.c" value="5" name="c"> 5 <br>
 
+                        <card-button @click.prevent.native="setmark(mark.pupil, mark.lesson, mark.pupil)" label="Оценить"></card-button>
+                    </form>
+
+                </simple-card>
+            </template>
         </template>
         <template v-if="site==='admin'">
 
