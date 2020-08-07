@@ -153,6 +153,34 @@ export default new Vue({
                })
             })
             .then(window.side.timetable());
-        }
+        },
+
+        editprofile: function(id){
+            this.data = this.data.find((item) => item.id === id);
+            this.site = 'adminprofileedit';
+        },
+        saveprofile: function(id, formid){
+            let form = document.getElementById(formid);
+            fetch("saveprofile", {
+                method: 'POST',
+                body: JSON.stringify({
+                'login': window.content.login,
+                'password': window.content.password,
+                'id': window.content.id,
+                'saveid': id,
+                'savelogin': form['login'].value,
+                'savepassword': form['password'].value,
+                'saveimg': form['img'].value,
+                'savename': form['name'].value,
+                'savesurname': form['surname'].value,
+                'savecoins': form['coins'].value,
+                'saveadmin': form['admin'].checked,
+                'saveteacher': form['teacher'].checked,
+                })
+            })
+            .then(data => window.side.adminprofile());
+        },
+        adminprofile: () => { window.side.adminprofile() },
+        createprofile: function(){ this.editprofile(-1) }
     }
 })

@@ -28,7 +28,6 @@ public class FetchPageController {
         }
         return new JSONObject().put("auth", false).toString();
     }
-
     @PostMapping("/shop")
     public String shop(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
@@ -37,7 +36,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/timetable")
     public String timetable(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
@@ -62,7 +60,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/lesson")
     public String lesson(@RequestBody String data) throws SQLException {
         System.out.println(data);
@@ -101,7 +98,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/mark")
     public String mark(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
@@ -124,7 +120,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/setmark")
     public String setmark(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
@@ -141,7 +136,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/homework")
     public String homework(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
@@ -164,7 +158,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/sethomework")
     public String sethomework(@RequestBody String data) throws SQLException {
         System.out.println(data);
@@ -182,7 +175,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/basket")
     public String basket(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
@@ -203,7 +195,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/buy")
     public String buy(@RequestBody String data) throws SQLException {
         System.out.println(data);
@@ -221,7 +212,6 @@ public class FetchPageController {
         }
         return new JSONObject().put("correct", "whoami").toString();
     }
-
     @PostMapping("/confirm")
     public String confirm(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
@@ -232,7 +222,6 @@ public class FetchPageController {
         }
         return null;
     }
-
     @PostMapping("/decline")
     public String decline(@RequestBody String data) throws SQLException {
         if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
@@ -243,34 +232,85 @@ public class FetchPageController {
     }
 
     @PostMapping("/admin")
-    public String admin(){
+    public String admin(@RequestBody String data) throws SQLException {
         return null;
     }
-
     @PostMapping("/admintimetable")
-    public String adminTimetable(){
+    public String adminTimetable(@RequestBody String data) throws SQLException {
+        if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
+            String query = "SELECT * FROM course";
+            ResultSet set = Database.query(query);
+            return JSONer.toJSONList(set, new String[]{"id", "name", "img"}).toString();
+        }
         return null;
     }
-
     @PostMapping("/adminprofile")
-    public String adminProfile(){
+    public String adminProfile(@RequestBody String data) throws SQLException {
+        if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
+            String query = "SELECT profile.id, profile.name, profile.surname, profile.img, " +
+                    "role.admin, role.teacher, " +
+                    "login.login, login.password, profile.coins " +
+                    "FROM profile " +
+                    "RIGHT JOIN login ON login.id = profile.id " +
+                    "LEFT JOIN role ON role.id = profile.id";
+            ResultSet set = Database.query(query);
+            String a = JSONer.toJSONList(set, new String[]{"id", "name", "surname", "img", "login", "password", "coins", "admin", "teacher"}).toString();
+            System.out.println(a);
+            return a;
+        }
         return null;
     }
-
     @PostMapping("/adminshop")
-    public String adminShop(){
+    public String adminShop(@RequestBody String data) throws SQLException {
+        if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
+            String query = "SELECT * FROM product";
+            ResultSet set = Database.query(query);
+            return JSONer.toJSONList(set, new String[]{"id", "cost", "quantity", "title", "about", "img"}).toString();
+        }
         return null;
     }
-
     @PostMapping("/adminbasket")
     public String adminBasket(){
+        return null;
+    }
+    @PostMapping("/saveprofile")
+    public String saveprofile(@RequestBody String data) throws SQLException {
+        if (checkAuth(getFromJSONString(data, "login"), getFromJSONString(data, "password"))){
+            if (getFromJSONString(data, "saveid").equals("default")){
+                Database.query("INSERT INTO login VALUES(default, '"+getFromJSONString(data,"savelogin")+"'," +
+                        "'"+getFromJSONString(data, "savepassword")+"')");
+                Database.query("INSERT INTO profile VALUES((SELECT id FROM login WHERE login = '"+getFromJSONString(data, "savelogin")+"' " +
+                        "and password = '"+getFromJSONString(data, "savepassword")+"'), " +
+                        "'"+getFromJSONString(data,"savename")+"'," +
+                        "'"+getFromJSONString(data, "savesurname")+"', " +
+                        "'"+getFromJSONString(data, "saveimg")+"', " +
+                        ""+getFromJSONString(data, "savecoins")+")");
+                Database.query("INSERT INTO role VALUES((SELECT id FROM login WHERE login = '"+getFromJSONString(data, "savelogin")+"' and " +
+                        "password = '"+getFromJSONString(data, "savepassword")+"'), " +
+                        "'"+getFromJSONString(data, "saveadmin")+"', " +
+                        "'"+getFromJSONString(data, "saveteacher")+"')");
+            }
+            else {
+                Database.query("UPDATE profile SET name = '"+getFromJSONString(data,"savename")+"'," +
+                        "surname = '"+getFromJSONString(data, "savesurname")+"', " +
+                        "img = '"+getFromJSONString(data, "saveimg")+"', " +
+                        "coins = "+getFromJSONString(data, "savecoins")+" " +
+                        "WHERE id = " + getFromJSONString(data, "saveid"));
+                Database.query("UPDATE login SET login = '"+getFromJSONString(data,"savelogin")+"'," +
+                        "password = '"+getFromJSONString(data, "savepassword")+"' " +
+                        "WHERE id = " + getFromJSONString(data, "saveid"));
+                Database.query("UPDATE role SET teacher = '"+getFromJSONString(data,"saveteacher")+"'," +
+                        "admin = '"+getFromJSONString(data, "saveadmin")+"' " +
+                        "WHERE id = " + getFromJSONString(data, "saveid"));
+            }
+
+        }
         return null;
     }
 
     public static boolean checkAuth(String login, String password) throws SQLException {
         return Database.query("SELECT * FROM login where login = '"+login+"' and password = '"+password+"'").next();
     }
-
     public static void createLessonIfNotExists(String course, String date) throws SQLException {
         if (Database.query("SELECT * FROM lesson WHERE course = " + course + " and date = " + date).next()) return;
         Database.query("INSERT INTO lesson VALUES(default, "+course+", "+date+", 'nothing')");

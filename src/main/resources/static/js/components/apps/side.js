@@ -1,5 +1,8 @@
 export default new Vue({
     el: '#side',
+    data: {
+        isAdmin: false
+    },
     methods: {
         profile: () => {
             fetch("auth", {
@@ -46,6 +49,21 @@ export default new Vue({
             .then(data => data.json())
             .then(data => window.content.data = data)
             .then(data => window.content.site = 'timetable');
-        }
+        },
+        admin: function(){
+            window.content.site = 'admin',
+            this.isAdmin = true;
+        },
+        adminprofile: function(){
+            fetch("adminprofile", {
+                method: 'POST',
+                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id})
+            })
+            .then(data => data.json())
+            .then(data => window.content.data = data)
+            .then(data => window.content.site = 'adminprofile')
+            .catch(data => console.log(data));
+        },
+
     },
 });
