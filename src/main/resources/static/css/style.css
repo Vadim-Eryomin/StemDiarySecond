@@ -166,5 +166,12 @@ footer{
     display: block;
     margin: auto;
 }
+select{
+    width: 150px;
+    height: 40px;
+    display: block;
+    margin: auto;
+    text-align: center;
+}
 
 

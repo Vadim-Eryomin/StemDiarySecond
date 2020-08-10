@@ -162,8 +162,8 @@
                         <card-input name="name" label="Имя" :value="data.name"></card-input>
                         <card-input name="surname" label="Фамилия" :value="data.surname"></card-input>
                         <card-input name="coins" label="Коины" :value="data.coins"></card-input>
-                        <card-input name="teacher" type="checkbox" label="Учитель" :checked="data.teacher === 't'"></card-input>
-                        <card-input name="admin" type="checkbox" label="Админ" :checked="data.admin === 't'"></card-input>
+                        <card-input name="teacher" type="checkbox" label="Учитель" :checked="data.teacher === true"></card-input>
+                        <card-input name="admin" type="checkbox" label="Админ" :checked="data.admin === true"></card-input>
                         <card-button @click.prevent.native="saveprofile(data.id, 'profile')" label="Сохранить"></card-button>
                         <card-button @click.prevent.native="adminprofile" class="second-card-button" label="Отменить"></card-button>
                     </form>
@@ -188,6 +188,127 @@
                 </simple-card>
             </template>
 
+        </template>
+        <template v-if="site==='adminbasket'">
+            <template v-for="card in data">
+                <simple-card :key="card.id">
+                    <card-label :label="card.title"></card-label>
+                    <card-image :src="card.img"></card-image>
+                    <card-label :label="'Покупатель: ' + card.name + ' ' + card.surname"></card-label>
+                    <card-label :label="'Статус: ' + card.status"></card-label>
+                    <card-button @click.prevent.native="editbasket(card.id)" label="Изменить"></card-button>
+                </simple-card>
+            </template>
+        </template>
+        <template v-if="site==='adminbasketedit'">
+            <simple-card :key="data.id">
+                <form id="basket">
+                    <card-label label="Редактирование"></card-label>
+                    <card-label :label="data.title"></card-label>
+                    <card-image :src="data.img"></card-image>
+                    <card-label :label="'Покупатель: ' + data.name + ' ' + data.surname"></card-label>
+                    <select name="status">
+                        <template v-for="status in statuses">
+                            <option :value="status" :selected="data.status === status">{{status}}</option>
+                        </template>
+                    </select>
+                    <card-button @click.prevent.native="savebasket(data.id, 'basket')" label="Сохранить"></card-button>
+                    <card-button @click.prevent.native="adminbasket" class="second-card-button" label="Отменить"></card-button>
+                </form>
+            </simple-card>
+        </template>
+        <template v-if="site==='adminshop'">
+            <template v-for="card in data">
+                <simple-card :key="card.id">
+                    <card-label :label="card.title"></card-label>
+                    <card-image :src="card.img"></card-image>
+                    <card-label :label="'Стоимость: ' + card.cost"></card-label>
+                    <card-button @click.prevent.native="editshop(card.id)" label="Изменить"></card-button>
+                </simple-card>
+            </template>
+            <simple-card key="create">
+                <card-button @click.prevent.native="createshop" style="width: 100%; height: 100%; bottom: 0px; margin: 0px" label="+"></card-button>
+            </simple-card>
+        </template>
+        <template v-if="site==='adminshopedit'">
+            <template v-if="data !== undefined">
+                <simple-card :key="data.id" style="height: 500px">
+                    <form id="shop">
+                        <card-label label="Редактирование"></card-label>
+                        <card-image :src="data.img"></card-image>
+                        <card-input name="title" label="Название" :value="data.title"></card-input>
+                        <card-input name="img" label="Аватар" :value="data.img"></card-input>
+                        <card-input name="about" label="О товаре" :value="data.about"></card-input>
+                        <card-input name="cost" label="Стоимость" :value="data.cost"></card-input>
+                        <card-input name="quantity" label="Количество" :value="data.quantity"></card-input>
+                        <card-button @click.prevent.native="saveshop(data.id, 'shop')" label="Сохранить"></card-button>
+                        <card-button @click.prevent.native="adminshop" class="second-card-button" label="Отменить"></card-button>
+                    </form>
+                </simple-card>
+            </template>
+            <template v-else>
+                <simple-card style="height: 500px">
+                    <form id="shopcreate">
+                        <card-label label="Редактирование"></card-label>
+                        <card-image src="img/noroot.png"></card-image>
+                        <card-input name="title" label="Название"></card-input>
+                        <card-input name="img" label="Аватар"></card-input>
+                        <card-input name="about" label="О товаре"></card-input>
+                        <card-input name="cost" label="Стоимость"></card-input>
+                        <card-input name="quantity" label="Количество"></card-input>
+                        <card-button @click.prevent.native="saveshop('default', 'shopcreate')" label="Сохранить"></card-button>
+                        <card-button @click.prevent.native="adminshop" class="second-card-button" label="Отменить"></card-button>
+                    </form>
+                </simple-card>
+            </template>
+
+        </template>
+        <template v-if="site==='admintimetable'">
+            <template v-for="card in data">
+                <simple-card :key="card.id">
+                    <card-label :label="card.coursename"></card-label>
+                    <card-image :src="card.courseimg"></card-image>
+                    <card-button @click.prevent.native="edittimetable(card.id)" label="Изменить"></card-button>
+                </simple-card>
+            </template>
+            <simple-card key="create">
+                <card-button @click.prevent.native="createtimetable" style="width: 100%; height: 100%; bottom: 0px; margin: 0px" label="+"></card-button>
+            </simple-card>
+        </template>
+        <template v-if="site==='admintimetableedit'">
+            <template v-if="data !== undefined">
+                <simple-card :key="data.id" style="height: 500px">
+                    <form id="timetable">
+                        <card-label label="Редактирование"></card-label>
+                        <card-image :src="data.courseimg"></card-image>
+                        <card-input name="coursename" label="Название" :value="data.coursename"></card-input>
+                        <card-input name="courseimg" label="Аватар" :value="data.courseimg"></card-input>
+                        <p class="card-label">Учитель</p>
+                        <select name="teacher">
+                            <template v-for="teacher in teachers">
+                                <option :value="teacher.id">{{teacher.name}} {{teacher.surname}}</option>
+                            </template>
+                        </select>
+                        <p class="card-label">Дата</p>
+                        <input type="date" :value="datestring" name="date" class="card-input">
+                        <p class="card-label">Время</p>
+                        <input type="time" :value="timestring" name="time" class="card-input">
+
+                        <card-button @click.prevent.native="savetimetable(data.id, 'timetable')" label="Сохранить"></card-button>
+                        <card-button @click.prevent.native="admintimetable" class="second-card-button" label="Отменить"></card-button>
+                    </form>
+                </simple-card>
+            </template>
+            <template v-else>
+                <simple-card style="height: 650px">
+                    <form id="timetablecreate">
+                        <card-label label="Создание"></card-label>
+                        <card-image src="img/noroot.png"></card-image>
+                        <card-button @click.prevent.native="saveprofile('default', 'profilecreate')" label="Сохранить"></card-button>
+                        <card-button @click.prevent.native="adminprofile" class="second-card-button" label="Отменить"></card-button>
+                    </form>
+                </simple-card>
+            </template>
         </template>
     </template>
 

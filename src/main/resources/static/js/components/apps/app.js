@@ -11,7 +11,11 @@ export default new Vue({
         id: 0,
         data: {},
         coins: 0,
-        pupils: {}
+        pupils: {},
+        statuses: ['didnt read', 'in work', 'get this!', 'issued'],
+        teachers: {},
+        datestring: "",
+        timestrimg: ""
     },
     methods: {
         form: function(method, formId, fields){
@@ -43,7 +47,8 @@ export default new Vue({
             fetch(method, {method: 'POST', body: JSON.stringify(obj)})
             .then(data => data.json())
             .then(data => {
-                if(data.auth === true){
+                console.log(data)
+                if(data.auth === 't'){
                     console.log('auth!');
                     console.log(data);
                     this.id = data.id;
@@ -181,6 +186,81 @@ export default new Vue({
             .then(data => window.side.adminprofile());
         },
         adminprofile: () => { window.side.adminprofile() },
-        createprofile: function(){ this.editprofile(-1) }
+        createprofile: function(){ this.editprofile(-1) },
+        editbasket: function(id){
+            this.data = this.data.find((item) => item.id === id);
+            this.site = 'adminbasketedit';
+        },
+        savebasket: (id, formid) => {
+            let form = document.getElementById(formid);
+            fetch("savebasket", {
+                method: 'POST',
+                body: JSON.stringify({
+                'login': window.content.login,
+                'password': window.content.password,
+                'id': window.content.id,
+                'saveid': id,
+                'savestatus': form['status'].value,
+                })
+            })
+            .then(data => window.side.adminbasket());
+        },
+        editshop: function(id){
+            this.data = this.data.find((item) => item.id === id);
+            this.site = 'adminshopedit';
+        },
+        saveshop: (id, formid) => {
+            let form = document.getElementById(formid);
+            fetch("saveshop", {
+                method: 'POST',
+                body: JSON.stringify({
+                'login': window.content.login,
+                'password': window.content.password,
+                'id': window.content.id,
+                'saveid': id,
+                'savetitle': form['title'].value,
+                'saveimg': form['img'].value,
+                'saveabout': form['about'].value,
+                'savecost': form['cost'].value,
+                'savequantity': form['quantity'].value,
+                })
+            })
+            .then(data => window.side.adminshop());
+        },
+        createshop: function(){ this.editshop(-1) },
+        edittimetable: function(id){
+            this.data = this.data.find((item) => item.id === id);
+            fetch("teachers", {
+                method: 'POST',
+                body: JSON.stringify({
+                'login': window.content.login,
+                'password': window.content.password,
+                })
+            })
+            .then(data => data.json())
+            .then(data => this.teachers = data);
+            this.site = 'admintimetableedit';
+
+            let date = new Date(parseInt(this.data.coursefirstdate) - new Date().getTimezoneOffset() * 60);
+            this.datestring = date.getFullYear() + "-" + (date.getMonth() < 10 ? "0" : "") + date.getMonth() + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate();
+            this.timestring = (date.getHours() < 10 ? "0" : "") + date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
+        },
+        savetimetable: (id, formid) => {
+            let form = document.getElementById(formid);
+            fetch("savetimetable", {
+                method: 'POST',
+                body: JSON.stringify({
+                'login': window.content.login,
+                'password': window.content.password,
+                'saveid': id,
+                'savename': form['coursename'].value,
+                'saveimg': form['courseimg'].value,
+                'saveteacher': form['teacher'].value,
+                'savedate': (form['date'].valueAsNumber + form['time'].valueAsNumber) - (new Date().getTimezoneOffset() * 60),
+                })
+            })
+            .then(data => window.side.admintimetable());
+        },
+        adminshop: () => {window.side.adminshop()}
     }
 })

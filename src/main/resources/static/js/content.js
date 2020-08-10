@@ -26,7 +26,8 @@ import {} from './libs/connection.js';
         })
         .then(data => data.json())
         .then(data => {
-            if(data.auth === true){
+            if(data.auth === 't'){
+                content.data = data;
                 console.log(data);
                 content.isAuth = true;
                 content.login = data.login;

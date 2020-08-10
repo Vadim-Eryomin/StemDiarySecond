@@ -61,9 +61,34 @@ export default new Vue({
             })
             .then(data => data.json())
             .then(data => window.content.data = data)
-            .then(data => window.content.site = 'adminprofile')
-            .catch(data => console.log(data));
+            .then(data => window.content.site = 'adminprofile');
         },
-
+        adminbasket: () => {
+            fetch("adminbasket", {
+                method: 'POST',
+                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id})
+            })
+            .then(data => data.json())
+            .then(data => window.content.data = data)
+            .then(data => window.content.site = 'adminbasket');
+        },
+        adminshop: () => {
+            fetch("adminshop", {
+                method: 'POST',
+                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id})
+            })
+            .then(data => data.json())
+            .then(data => window.content.data = data)
+            .then(data => window.content.site = 'adminshop');
+        },
+        admintimetable: () => {
+            fetch("admintimetable", {
+                method: 'POST',
+                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id})
+            })
+            .then(data => data.json())
+            .then(data => window.content.data = data)
+            .then(data => window.content.site = 'admintimetable');
+        }
     },
 });
