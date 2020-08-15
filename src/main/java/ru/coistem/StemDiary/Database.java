@@ -14,15 +14,21 @@ public class Database {
         connection = DriverManager.getConnection(connector, login, password);
     }
 
-    public static ResultSet query(String query) {
+    public static ResultSet query(String query) throws Exception {
+        query = query.toLowerCase();
         System.out.println(query);
+        if (query.split("return").length != 1) throw new Exception("null data");
         ResultSet set = null;
         try {
             Statement statement = connection.createStatement();
-            set = statement.executeQuery(query);
-        } catch (PSQLException ignore) {
+            if (query.contains("update") || query.contains("insert") || query.contains("delete"))
+                statement.execute(query);
+            else
+                set = statement.executeQuery(query);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (Exception e){
+            System.out.println("null data in " + query);
         }
         return set;
     }

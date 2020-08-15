@@ -36,6 +36,7 @@ footer{
   background-color: rgba(0,106,131,1);
   padding: 20px;
   color: white;
+  z-index: 100;
 }
 #content{
   grid-area: cont;

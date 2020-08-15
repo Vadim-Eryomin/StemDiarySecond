@@ -49,7 +49,7 @@
         </template>
         <template v-if="site==='shop'">
             <template v-for="card in data">
-                <simple-card :key="card.id + 'shop'">
+                <simple-card :key="card.id">
                     <card-label key="title" :label="card.title"></card-label>
                     <card-image key="img" :src="card.img"></card-image>
                     <card-label key="about" :label="card.about"></card-label>
@@ -207,11 +207,12 @@
                     <card-label :label="data.title"></card-label>
                     <card-image :src="data.img"></card-image>
                     <card-label :label="'Покупатель: ' + data.name + ' ' + data.surname"></card-label>
-                    <select name="status">
+                    <select name="savestatus">
                         <template v-for="status in statuses">
                             <option :value="status" :selected="data.status === status">{{status}}</option>
                         </template>
                     </select>
+                    <input type="hidden" name="saveid" :value="data.id">
                     <card-button @click.prevent.native="savebasket(data.id, 'basket')" label="Сохранить"></card-button>
                     <card-button @click.prevent.native="adminbasket" class="second-card-button" label="Отменить"></card-button>
                 </form>
@@ -236,11 +237,12 @@
                     <form id="shop">
                         <card-label label="Редактирование"></card-label>
                         <card-image :src="data.img"></card-image>
-                        <card-input name="title" label="Название" :value="data.title"></card-input>
-                        <card-input name="img" label="Аватар" :value="data.img"></card-input>
-                        <card-input name="about" label="О товаре" :value="data.about"></card-input>
-                        <card-input name="cost" label="Стоимость" :value="data.cost"></card-input>
-                        <card-input name="quantity" label="Количество" :value="data.quantity"></card-input>
+                        <card-input name="savetitle" label="Название" :value="data.title"></card-input>
+                        <card-input name="saveimg" label="Аватар" :value="data.img"></card-input>
+                        <card-input name="saveabout" label="О товаре" :value="data.about"></card-input>
+                        <card-input name="savecost" label="Стоимость" :value="data.cost"></card-input>
+                        <card-input name="savequantity" label="Количество" :value="data.quantity"></card-input>
+                        <input type="hidden" name="saveid" :value="data.id">
                         <card-button @click.prevent.native="saveshop(data.id, 'shop')" label="Сохранить"></card-button>
                         <card-button @click.prevent.native="adminshop" class="second-card-button" label="Отменить"></card-button>
                     </form>
@@ -276,15 +278,15 @@
             </simple-card>
         </template>
         <template v-if="site==='admintimetableedit'">
-            <template v-if="data !== undefined">
-                <simple-card :key="data.id" style="height: 500px">
+            <template v-if="timetable !== undefined">
+                <simple-card :key="timetable.id" style="height: 500px">
                     <form id="timetable">
                         <card-label label="Редактирование"></card-label>
-                        <card-image :src="data.courseimg"></card-image>
-                        <card-input name="coursename" label="Название" :value="data.coursename"></card-input>
-                        <card-input name="courseimg" label="Аватар" :value="data.courseimg"></card-input>
+                        <card-image :src="timetable.courseimg"></card-image>
+                        <card-input name="savename" label="Название" :value="timetable.coursename"></card-input>
+                        <card-input name="saveimg" label="Аватар" :value="timetable.courseimg"></card-input>
                         <p class="card-label">Учитель</p>
-                        <select name="teacher">
+                        <select name="saveteacher">
                             <template v-for="teacher in teachers">
                                 <option :value="teacher.id">{{teacher.name}} {{teacher.surname}}</option>
                             </template>
@@ -293,8 +295,9 @@
                         <input type="date" :value="datestring" name="date" class="card-input">
                         <p class="card-label">Время</p>
                         <input type="time" :value="timestring" name="time" class="card-input">
+                        <input type="hidden" name="saveid" :value="timetable.id">
 
-                        <card-button @click.prevent.native="savetimetable(data.id, 'timetable')" label="Сохранить"></card-button>
+                        <card-button @click.prevent.native="savetimetable(timetable.id, 'timetable')" label="Сохранить"></card-button>
                         <card-button @click.prevent.native="admintimetable" class="second-card-button" label="Отменить"></card-button>
                     </form>
                 </simple-card>

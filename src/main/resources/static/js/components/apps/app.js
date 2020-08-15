@@ -14,88 +14,30 @@ export default new Vue({
         pupils: {},
         statuses: ['didnt read', 'in work', 'get this!', 'issued'],
         teachers: {},
+        timetable: {},
         datestring: "",
         timestrimg: ""
     },
     methods: {
-        form: function(method, formId, fields){
-            let form = document.getElementById(formId);
-            let obj = {};
-            for(let item of fields) {
-                if(item === 'login') this.login = form[item].value;
-                if(item === 'password') this.passwords = form[item].value;
-                obj[item] = form[item].value
-            };
-            (function(){
-                fetch(method, {method: 'POST', body: JSON.stringify(obj)})
-                .then(data => data.json())
-                .then(data => window.data = data);
-            })();
-        },
         auth: function(){
-            let method = 'auth';
-            let formId = 'loginForm';
-            let fields = ['login', 'password'];
-            let form = document.getElementById(formId);
-            let obj = {};
-            for(let item of fields) {
-                if(item === 'login') this.login = form[item].value;
-                if(item === 'password') this.passwords = form[item].value;
-                obj[item] = form[item].value
-            };
+            fetchPage('auth', 'loginForm', null, () => {
+            //можно оптимизировать, создав объект
+                if(!data.auth) return;
+                this.id = data.id;
+                this.login = data.login;
+                this.password = loginForm['password'].value;
+                this.img = data.img;
+                this.name = data.name;
+                this.surname = data.surname;
+                this.isAuth = true;
+                document.cookie = "login="+(data.login);
+                document.cookie = "password="+(data.password);
+            })
+        },
+        buy: (id, cost) => fetchPage('buy', null, {'coins': content.coins, 'buy': id, 'cost': cost}, () => setTimeout(window.side.shop, 100)),
+        confirm: (id) => fetchPage('confirm', null, {'confirm': id}, () => setTimeout(window.side.basket, 100)),
+        decline: (id) => fetchPage('decline', null, {'decline': id}, () => setTimeout(window.side.basket, 100)),
 
-            fetch(method, {method: 'POST', body: JSON.stringify(obj)})
-            .then(data => data.json())
-            .then(data => {
-                console.log(data)
-                if(data.auth === 't'){
-                    console.log('auth!');
-                    console.log(data);
-                    this.id = data.id;
-                    this.login = data.login;
-                    this.password = data.password;
-                    this.img = data.img;
-                    this.name = data.name;
-                    this.surname = data.surname;
-                    this.isAuth = true;
-                    document.cookie = "login="+(data.login);
-                    document.cookie = "password="+(data.password);
-                }
-            })
-        },
-        buy: (id, cost) => {
-            fetch("buy", {method: 'POST', body: JSON.stringify({
-                login: content.login,
-                password: content.password,
-                coins: content.coins,
-                id: content.id,
-                cost: cost,
-                buy: id
-                })
-            })
-            .then(data => data.json())
-            .then(data => console.log(data));
-        },
-        confirm: (id) => {
-            fetch("confirm", {method: 'POST', body: JSON.stringify({
-                login: content.login,
-                password: content.password,
-                id: content.id,
-                confirm: id
-                })
-            })
-            .then(setTimeout(window.side.basket, 100));
-        },
-        decline: (id) => {
-            fetch("decline", {method: 'POST', body: JSON.stringify({
-                login: content.login,
-                password: content.password,
-                id: content.id,
-                decline: id
-                })
-            })
-            .then(setTimeout(window.side.basket, 100));
-        },
         lesson: function(course){
             fetch("lesson", {
                 method: 'POST',
@@ -191,75 +133,29 @@ export default new Vue({
             this.data = this.data.find((item) => item.id === id);
             this.site = 'adminbasketedit';
         },
-        savebasket: (id, formid) => {
-            let form = document.getElementById(formid);
-            fetch("savebasket", {
-                method: 'POST',
-                body: JSON.stringify({
-                'login': window.content.login,
-                'password': window.content.password,
-                'id': window.content.id,
-                'saveid': id,
-                'savestatus': form['status'].value,
-                })
+        savebasket: (id, formId) => fetchPage('savebasket', formId, null, () => window.side.adminbasket),
+        saveshop: (id, formId) => fetchPage('saveshop', formId, null, () => {
+            side.adminshop();
+        }),
+        createshop: function(){ this.editshop(-1) },
+        edittimetable: function(id){
+            this.timetable = this.data.find((item) => item.id === id);
+            fetchPage('teachers', null, null, () => {
+                content.teachers = content.data;
+                content.site = 'admintimetableedit';
+                let date = new Date(parseInt(content.timetable.coursefirstdate));
+                content.datestring = date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate();
+                content.timestring = (date.getHours() + new Date().getTimezoneOffset() / 60 < 10 ? "0" : "") + (date.getHours() + new Date().getTimezoneOffset() / 60) + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
             })
-            .then(data => window.side.adminbasket());
+        },
+        savetimetable: function(id, formId){
+            let form = document.getElementById(formId);
+            let startObject = {'savedate': (form['date'].valueAsNumber + form['time'].valueAsNumber)};
+            window.fetchPage('savetimetable', formId, startObject, window.side.admintimetable);
         },
         editshop: function(id){
             this.data = this.data.find((item) => item.id === id);
             this.site = 'adminshopedit';
-        },
-        saveshop: (id, formid) => {
-            let form = document.getElementById(formid);
-            fetch("saveshop", {
-                method: 'POST',
-                body: JSON.stringify({
-                'login': window.content.login,
-                'password': window.content.password,
-                'id': window.content.id,
-                'saveid': id,
-                'savetitle': form['title'].value,
-                'saveimg': form['img'].value,
-                'saveabout': form['about'].value,
-                'savecost': form['cost'].value,
-                'savequantity': form['quantity'].value,
-                })
-            })
-            .then(data => window.side.adminshop());
-        },
-        createshop: function(){ this.editshop(-1) },
-        edittimetable: function(id){
-            this.data = this.data.find((item) => item.id === id);
-            fetch("teachers", {
-                method: 'POST',
-                body: JSON.stringify({
-                'login': window.content.login,
-                'password': window.content.password,
-                })
-            })
-            .then(data => data.json())
-            .then(data => this.teachers = data);
-            this.site = 'admintimetableedit';
-
-            let date = new Date(parseInt(this.data.coursefirstdate) - new Date().getTimezoneOffset() * 60);
-            this.datestring = date.getFullYear() + "-" + (date.getMonth() < 10 ? "0" : "") + date.getMonth() + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate();
-            this.timestring = (date.getHours() < 10 ? "0" : "") + date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
-        },
-        savetimetable: (id, formid) => {
-            let form = document.getElementById(formid);
-            fetch("savetimetable", {
-                method: 'POST',
-                body: JSON.stringify({
-                'login': window.content.login,
-                'password': window.content.password,
-                'saveid': id,
-                'savename': form['coursename'].value,
-                'saveimg': form['courseimg'].value,
-                'saveteacher': form['teacher'].value,
-                'savedate': (form['date'].valueAsNumber + form['time'].valueAsNumber) - (new Date().getTimezoneOffset() * 60),
-                })
-            })
-            .then(data => window.side.admintimetable());
         },
         adminshop: () => {window.side.adminshop()}
     }

@@ -194,13 +194,27 @@ class FetchPageControllerKt {
             "insertTimetable"   -> "INSERT INTO product(id, title, img, about, cost, quantity) VALUES(default, '${data.jsonString("savetitle")}', '${data.jsonString("saveimg")}', '${data.jsonString("saveabout")}', ${data.jsonString("savecost")}, ${data.jsonString("savequantity")})"
             "updateTimetable"   -> "UPDATE course SET name = '${data.jsonString("savename")}', img = '${data.jsonString("saveimg")}', firstdate = ${data.jsonString("savedate")}, teacher = '${data.jsonString("saveteacher")}' WHERE id = ${data.jsonString("saveid")}"
             else                -> "SELECT 't' as nothing"
-        })
+        }) ?: Database.query("SELECT 't' as nothing")
     }
 
     private fun checkAuth(data: String) = query("checkAuth", data).next()
     private fun String.jsonString(need: String): String {
-        val obj = JSONObject(this)
-        return if (obj.has(need)) obj.get(need).toString() else ""
+        val clean = listOf("\\", "'", "(", ")", ";", "/", "<", ">")
+        var data = this
+        for (char in clean){
+            val split = data.split(char)
+            data = ""
+            for (elem in split)
+                data += elem
+        }
+        val obj = JSONObject(data)
+        if (obj.has(need)){
+            if (obj.get(need) == ""){
+                return "return"
+            }
+            else return obj.get(need).toString()
+        }
+        return "return"
     }
     private fun ResultSet.jsonString(): String {
         val meta = this.metaData
@@ -264,6 +278,7 @@ class FetchPageControllerKt {
         else query("updateShop", data)
     }
     private fun adminSaveTimetable(data: String){
+        println(data)
         if (data.jsonString("saveid") == "default")
             query("insertTimetable", data)
         else query("updateTimetable", data)

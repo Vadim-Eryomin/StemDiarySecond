@@ -7,15 +7,21 @@ import button from './components/button.js';
 import getCookie from './libs/cookie.js';
 import side from './components/apps/side.js';
 import content from './components/apps/app.js';
+import {createData, fetchPage, swipe} from './util.js';
 
 //load autostart scripts
 import {} from './libs/connection.js';
 
 (function(){
     let login = getCookie('login');
-    let password = getCookie('password')
+    let password = getCookie('password');
     window.content = content;
     window.side = side;
+    window.createData = createData;
+    window.fetchPage = fetchPage;
+    window.swipe = swipe;
+    window.isActive = false;
+
     if(login) {
         fetch('auth', {
             method: 'POST',
