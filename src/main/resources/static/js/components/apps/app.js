@@ -34,110 +34,25 @@ export default new Vue({
                 document.cookie = "password="+(data.password);
             })
         },
+
         buy: (id, cost) => fetchPage('buy', null, {'coins': content.coins, 'buy': id, 'cost': cost}, () => setTimeout(window.side.shop, 100)),
         confirm: (id) => fetchPage('confirm', null, {'confirm': id}, () => setTimeout(window.side.basket, 100)),
         decline: (id) => fetchPage('decline', null, {'decline': id}, () => setTimeout(window.side.basket, 100)),
 
-        lesson: function(course){
-            fetch("lesson", {
-                method: 'POST',
-                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id, 'course': course})
-            })
-            .then(data => data.json())
-            .then(data => this.data = data)
-            .then(data => this.site = 'lesson');
-        },
-        mark: function(course, lesson){
-            fetch("mark", {
-                method: 'POST',
-                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id, 'course': course, 'lesson': lesson})
-            })
-            .then(data => data.json())
-            .then(data => this.data = data)
-            .then(data => this.site = 'mark')
-            .then(data => console.log(this));
-        },
-        setmark: (id, lesson, pupil) => {
-            let form = document.getElementById(id);
-            fetch("setmark", {
-                method: 'POST',
-                body: JSON.stringify(
-                    {'login': window.content.login,
-                     'password': window.content.password,
-                     'id': window.content.id,
-                     'lesson': lesson,
-                     'a': form['a'].value,
-                     'b': form['b'].value,
-                     'c': form['c'].value,
-                     'pupil': pupil
-               })
-            })
-            .then(window.side.timetable());
-        },
-        homework: function(course, lesson){
-            console.log(course + '  ' + lesson);
-            fetch("homework", {
-                method: 'POST',
-                body: JSON.stringify({'login': window.content.login, 'password': window.content.password, 'id': window.content.id, 'lesson': lesson, 'course': course})
-            })
-            .then(data => data.json())
-            .then(data => this.data = data)
-            .then(data => this.site = 'homework')
-            .then(data => console.log(this));
-        },
-        sethomework: (id, lesson, course) => {
-            let form = document.getElementById(id);
-            fetch("sethomework", {
-                method: 'POST',
-                body: JSON.stringify(
-                    {
-                    'login': window.content.login,
-                    'password': window.content.password,
-                    'id': window.content.id,
-                    'lesson': lesson,
-                    'course': course,
-                    'homework': form['homework'].value
-               })
-            })
-            .then(window.side.timetable());
-        },
+        lesson: (course) => fetchPage('lesson', null, {course}, null),
+        mark: (course, lesson) => fetchPage('mark', null, {course, lesson}, null),
+        setmark: (id, lesson, pupil) => fetchPage('setmark', id, {lesson, pupil}, () => setTimeout(window.side.timetable, 100)),
+        homework: (course, lesson) => fetchPage('homework', null, {course, lesson}, null),
+        sethomework: (id, lesson, course) => fetchPage('sethomework', id, {lesson, course}, () => setTimeout(window.side.timetable, 100)),
 
         editprofile: function(id){
             this.data = this.data.find((item) => item.id === id);
             this.site = 'adminprofileedit';
         },
-        saveprofile: function(id, formid){
-            let form = document.getElementById(formid);
-            fetch("saveprofile", {
-                method: 'POST',
-                body: JSON.stringify({
-                'login': window.content.login,
-                'password': window.content.password,
-                'id': window.content.id,
-                'saveid': id,
-                'savelogin': form['login'].value,
-                'savepassword': form['password'].value,
-                'saveimg': form['img'].value,
-                'savename': form['name'].value,
-                'savesurname': form['surname'].value,
-                'savecoins': form['coins'].value,
-                'saveadmin': form['admin'].checked,
-                'saveteacher': form['teacher'].checked,
-                })
-            })
-            .then(data => window.side.adminprofile());
-        },
-        adminprofile: () => { window.side.adminprofile() },
-        createprofile: function(){ this.editprofile(-1) },
         editbasket: function(id){
             this.data = this.data.find((item) => item.id === id);
             this.site = 'adminbasketedit';
         },
-        savebasket: (id, formId) => fetchPage('savebasket', formId, null, () => window.side.adminbasket),
-        saveshop: (id, formId) => fetchPage('saveshop', formId, null, () => {
-            side.adminshop();
-        }),
-        createshop: function(){ this.editshop(-1) },
         edittimetable: function(id){
             this.timetable = this.data.find((item) => item.id === id);
             fetchPage('teachers', null, null, () => {
@@ -148,15 +63,23 @@ export default new Vue({
                 content.timestring = (date.getHours() + new Date().getTimezoneOffset() / 60 < 10 ? "0" : "") + (date.getHours() + new Date().getTimezoneOffset() / 60) + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
             })
         },
-        savetimetable: function(id, formId){
-            let form = document.getElementById(formId);
-            let startObject = {'savedate': (form['date'].valueAsNumber + form['time'].valueAsNumber)};
-            window.fetchPage('savetimetable', formId, startObject, window.side.admintimetable);
-        },
         editshop: function(id){
             this.data = this.data.find((item) => item.id === id);
             this.site = 'adminshopedit';
         },
-        adminshop: () => {window.side.adminshop()}
+
+        saveprofile: (id, formId) => fetchPage('saveprofile', formId, {'saveid': id, 'saveadmin': document.getElementById(formId)['saveadmin'].checked,
+            'saveteacher': document.getElementById(formId)['saveteacher'].checked}, () => setTimeout(window.side.adminprofile, 100)),
+        savebasket: (id, formId) => fetchPage('savebasket', formId, null, () => setTimeout(window.side.adminbasket, 100)),
+        saveshop: (id, formId) => fetchPage('saveshop', formId, null, () => setTimeout(window.side.adminshop, 100)),
+        savetimetable: (id, formId) => fetchPage('savetimetable', formId, {'savedate': (document.getElementById(formId)['date'].valueAsNumber
+            + document.getElementById(formId)['time'].valueAsNumber)}, () => setTimeout(window.side.admintimetable, 100)),
+
+        adminprofile: () => window.side.adminprofile(),
+        adminshop: () => window.side.adminshop(),
+
+        createprofile: function(){ this.editprofile(-1) },
+        createshop: function(){ this.editshop(-1) },
+        createtimetable: function(){ this.edittimetable(-1) },
     }
 })

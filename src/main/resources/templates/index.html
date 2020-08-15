@@ -156,14 +156,15 @@
                     <form id="profile">
                         <card-label label="Редактирование"></card-label>
                         <card-image :src="data.img"></card-image>
-                        <card-input name="login" label="Логин" :value="data.login"></card-input>
-                        <card-input name="password" label="Пароль" :value="data.password"></card-input>
-                        <card-input name="img" label="Аватар" :value="data.img"></card-input>
-                        <card-input name="name" label="Имя" :value="data.name"></card-input>
-                        <card-input name="surname" label="Фамилия" :value="data.surname"></card-input>
-                        <card-input name="coins" label="Коины" :value="data.coins"></card-input>
-                        <card-input name="teacher" type="checkbox" label="Учитель" :checked="data.teacher === true"></card-input>
-                        <card-input name="admin" type="checkbox" label="Админ" :checked="data.admin === true"></card-input>
+                        <card-input name="savelogin" label="Логин" :value="data.login"></card-input>
+                        <card-input name="savepassword" label="Пароль" :value="data.password"></card-input>
+                        <card-input name="saveimg" label="Аватар" :value="data.img"></card-input>
+                        <card-input name="savename" label="Имя" :value="data.name"></card-input>
+                        <card-input name="savesurname" label="Фамилия" :value="data.surname"></card-input>
+                        <card-input name="savecoins" label="Коины" :value="data.coins"></card-input>
+                        <card-input name="saveteacher" type="checkbox" label="Учитель" :checked="data.teacher === true"></card-input>
+                        <card-input name="saveadmin" type="checkbox" label="Админ" :checked="data.admin === true"></card-input>
+                        <input type="hidden" :value="data.id" name="saveid">
                         <card-button @click.prevent.native="saveprofile(data.id, 'profile')" label="Сохранить"></card-button>
                         <card-button @click.prevent.native="adminprofile" class="second-card-button" label="Отменить"></card-button>
                     </form>
@@ -174,14 +175,15 @@
                     <form id="profilecreate">
                         <card-label label="Создание"></card-label>
                         <card-image src="img/noroot.png"></card-image>
-                        <card-input name="login" label="Логин"></card-input>
-                        <card-input name="password" label="Пароль"></card-input>
-                        <card-input name="img" label="Аватар"></card-input>
-                        <card-input name="name" label="Имя"></card-input>
-                        <card-input name="surname" label="Фамилия"></card-input>
-                        <card-input name="coins" label="Коины"></card-input>
-                        <card-input name="teacher" type="checkbox" label="Учитель"></card-input>
-                        <card-input name="admin" type="checkbox" label="Админ"></card-input>
+                        <card-input name="savelogin" label="Логин"></card-input>
+                        <card-input name="savepassword" label="Пароль"></card-input>
+                        <card-input name="saveimg" label="Аватар"></card-input>
+                        <card-input name="savename" label="Имя"></card-input>
+                        <card-input name="savesurname" label="Фамилия"></card-input>
+                        <card-input name="savecoins" label="Коины"></card-input>
+                        <card-input name="saveteacher" type="checkbox" label="Учитель"></card-input>
+                        <card-input name="saveadmin" type="checkbox" label="Админ"></card-input>
+                        <input type="hidden" value="default" name="saveid">
                         <card-button @click.prevent.native="saveprofile('default', 'profilecreate')" label="Сохранить"></card-button>
                         <card-button @click.prevent.native="adminprofile" class="second-card-button" label="Отменить"></card-button>
                     </form>
@@ -253,11 +255,12 @@
                     <form id="shopcreate">
                         <card-label label="Редактирование"></card-label>
                         <card-image src="img/noroot.png"></card-image>
-                        <card-input name="title" label="Название"></card-input>
-                        <card-input name="img" label="Аватар"></card-input>
-                        <card-input name="about" label="О товаре"></card-input>
-                        <card-input name="cost" label="Стоимость"></card-input>
-                        <card-input name="quantity" label="Количество"></card-input>
+                        <card-input name="savetitle" label="Название"></card-input>
+                        <card-input name="saveimg" label="Аватар"></card-input>
+                        <card-input name="saveabout" label="О товаре"></card-input>
+                        <card-input name="savecost" label="Стоимость"></card-input>
+                        <card-input name="savequantity" label="Количество"></card-input>
+                        <input type="hidden" value="default" name="saveid">
                         <card-button @click.prevent.native="saveshop('default', 'shopcreate')" label="Сохранить"></card-button>
                         <card-button @click.prevent.native="adminshop" class="second-card-button" label="Отменить"></card-button>
                     </form>
@@ -307,6 +310,7 @@
                     <form id="timetablecreate">
                         <card-label label="Создание"></card-label>
                         <card-image src="img/noroot.png"></card-image>
+                        <input type="hidden" value="default" name="saveid">
                         <card-button @click.prevent.native="saveprofile('default', 'profilecreate')" label="Сохранить"></card-button>
                         <card-button @click.prevent.native="adminprofile" class="second-card-button" label="Отменить"></card-button>
                     </form>

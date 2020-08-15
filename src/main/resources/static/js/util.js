@@ -40,8 +40,8 @@ export function fetchPage(page, formId = 'default', startObject = {}, nextMethod
         .then(data => data.json())
         .then(data => window.content.data = data)
         .then(data => window.content.site = page)
-        .then(data => nextMethod())
         .catch(error => {});
+        setTimeout(nextMethod, 0);
     })
 }
 

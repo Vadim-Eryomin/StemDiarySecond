@@ -17,7 +17,7 @@ public class Database {
     public static ResultSet query(String query) throws Exception {
         query = query.toLowerCase();
         System.out.println(query);
-        if (query.split("return").length != 1) throw new Exception("null data");
+        if (query.contains("return")) throw new Exception("null data");
         ResultSet set = null;
         try {
             Statement statement = connection.createStatement();

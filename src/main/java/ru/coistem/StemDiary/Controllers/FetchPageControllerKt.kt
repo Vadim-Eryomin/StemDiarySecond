@@ -41,7 +41,7 @@ class FetchPageControllerKt {
             val role = query("role", data).jsonFirst()
             val firstDate: String = query("firstDate", data).jsonFirst().get("firstdate").toString()
             var date: String = data.jsonString("date")
-            if (date == "") date = (firstDate.toLong() + ceil((Date().time - firstDate.toLong()) / 604800000.0) * 604800000).toString()
+            if (date == "" || date == "return") date = (firstDate.toLong() + ceil((Date().time - firstDate.toLong()) / 604800000.0) * 604800000).toString()
             createLessonIfNotExists(data.jsonString("course"), date)
             val innerData = JSONObject(data).put("date", date).toString()
             val set = query("lesson", innerData)
@@ -188,7 +188,7 @@ class FetchPageControllerKt {
             "insertProfile"     -> "INSERT INTO login VALUES(default, '${data.jsonString("savelogin")}', '${data.jsonString("savepassword")}'); INSERT INTO profile VALUES((SELECT id FROM login WHERE login = '${data.jsonString("savelogin")}' and password = '${data.jsonString("savepassword")}'), '${data.jsonString("savename")}',  '${data.jsonString("savesurname")}', '${data.jsonString("saveimg")}', ${data.jsonString("savecoins")});  INSERT INTO role VALUES((SELECT id FROM login WHERE login = '${data.jsonString("savelogin")}' and password = '${data.jsonString("savepassword")}'), '${data.jsonString("saveadmin")}', '${data.jsonString("saveteacher")}')"
             "updateProfile"     -> "UPDATE profile SET name = '${data.jsonString("savename")}', surname = '${data.jsonString("savesurname")}', img = '${data.jsonString("saveimg")}', coins = ${data.jsonString("savecoins")} WHERE id = ${data.jsonString("saveid")};  UPDATE login SET login = '${data.jsonString("savelogin")}', password = '${data.jsonString("savepassword")}' WHERE id = ${data.jsonString("saveid")}; UPDATE role SET teacher = '${data.jsonString("saveteacher")}', admin = '${data.jsonString("saveadmin")}' WHERE id = ${data.jsonString("saveid")}"
             "saveBasket"        -> "UPDATE basket SET status = '${data.jsonString("savestatus")}' WHERE id = ${data.jsonString("saveid")}"
-            "insertShop"        -> "INSERT INTO product(id, title, img, about, cost, quantity) VALUES(default, '${data.jsonString("savetitle")}', '${data.jsonString("saveimg")}', '${data.jsonString("saveabout")}', ${data.jsonString("savecost")}, ${data.jsonString("savequantity")}"
+            "insertShop"        -> "INSERT INTO product(id, title, img, about, cost, quantity) VALUES(default, '${data.jsonString("savetitle")}', '${data.jsonString("saveimg")}', '${data.jsonString("saveabout")}', ${data.jsonString("savecost")}, ${data.jsonString("savequantity")})"
             "updateShop"        -> "UPDATE product SET title = '${data.jsonString("savetitle")}', img = '${data.jsonString("saveimg")}', about = '${data.jsonString("saveabout")}', cost = ${data.jsonString("savecost")}, quantity = '${data.jsonString("savequantity")}' WHERE id = ${data.jsonString("saveid")}"
             "teachers"          -> "SELECT profile.id, profile.name, profile.surname, profile.img FROM profile JOIN role on role.id = profile.id WHERE role.teacher = 't'"
             "insertTimetable"   -> "INSERT INTO product(id, title, img, about, cost, quantity) VALUES(default, '${data.jsonString("savetitle")}', '${data.jsonString("saveimg")}', '${data.jsonString("saveabout")}', ${data.jsonString("savecost")}, ${data.jsonString("savequantity")})"
@@ -199,7 +199,7 @@ class FetchPageControllerKt {
 
     private fun checkAuth(data: String) = query("checkAuth", data).next()
     private fun String.jsonString(need: String): String {
-        val clean = listOf("\\", "'", "(", ")", ";", "/", "<", ">")
+        val clean = listOf("\\", "'", "(", ")", ";", "<", ">")
         var data = this
         for (char in clean){
             val split = data.split(char)
@@ -214,7 +214,7 @@ class FetchPageControllerKt {
             }
             else return obj.get(need).toString()
         }
-        return "return"
+        return "default"
     }
     private fun ResultSet.jsonString(): String {
         val meta = this.metaData
