@@ -46,26 +46,33 @@ export default new Vue({
         sethomework: (id, lesson, course) => fetchPage('sethomework', id, {lesson, course}, () => setTimeout(window.side.timetable, 100)),
 
         editprofile: function(id){
-            this.data = this.data.find((item) => item.id === id);
-            this.site = 'adminprofileedit';
+            swipe(() => {
+                this.data = this.data.find((item) => item.id === id);
+                this.site = 'adminprofileedit';
+            })
         },
         editbasket: function(id){
-            this.data = this.data.find((item) => item.id === id);
-            this.site = 'adminbasketedit';
+            swipe(() => {
+                this.data = this.data.find((item) => item.id === id);
+                this.site = 'adminbasketedit';
+            })
         },
         edittimetable: function(id){
             this.timetable = this.data.find((item) => item.id === id);
             fetchPage('teachers', null, null, () => {
                 content.teachers = content.data;
-                content.site = 'admintimetableedit';
-                let date = new Date(parseInt(content.timetable.coursefirstdate));
-                content.datestring = date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate();
-                content.timestring = (date.getHours() + new Date().getTimezoneOffset() / 60 < 10 ? "0" : "") + (date.getHours() + new Date().getTimezoneOffset() / 60) + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
-            })
+                if(content.timetable != undefined){
+                    let date = new Date(parseInt(content.timetable.coursefirstdate));
+                    content.datestring = date.getFullYear() + "-" + ((date.getMonth() + 1) < 10 ? "0" : "") + (date.getMonth() + 1) + "-" + (date.getDate() < 10 ? "0" : "") + date.getDate();
+                    content.timestring = (date.getHours() + new Date().getTimezoneOffset() / 60 < 10 ? "0" : "") + (date.getHours() + new Date().getTimezoneOffset() / 60) + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
+                }
+            }, 'admintimetableedit');
         },
         editshop: function(id){
-            this.data = this.data.find((item) => item.id === id);
-            this.site = 'adminshopedit';
+            swipe(() => {
+                content.data = this.data.find((item) => item.id === id);
+                content.site = 'adminshopedit';
+            })
         },
 
         saveprofile: (id, formId) => fetchPage('saveprofile', formId, {'saveid': id, 'saveadmin': document.getElementById(formId)['saveadmin'].checked,

@@ -306,12 +306,23 @@
                 </simple-card>
             </template>
             <template v-else>
-                <simple-card style="height: 650px">
+                <simple-card style="height: 500px">
                     <form id="timetablecreate">
                         <card-label label="Создание"></card-label>
-                        <card-image src="img/noroot.png"></card-image>
-                        <input type="hidden" value="default" name="saveid">
-                        <card-button @click.prevent.native="saveprofile('default', 'profilecreate')" label="Сохранить"></card-button>
+                        <card-input name="savename" label="Название"></card-input>
+                        <card-input name="saveimg" label="Аватар"></card-input>
+                        <p class="card-label">Учитель</p>
+                        <select name="saveteacher">
+                            <template v-for="teacher in teachers">
+                                <option :value="teacher.id">{{teacher.name}} {{teacher.surname}}</option>
+                            </template>
+                        </select>
+                        <p class="card-label">Дата</p>
+                        <input type="date" name="date" class="card-input">
+                        <p class="card-label">Время</p>
+                        <input type="time" name="time" class="card-input">
+                        <input type="hidden" name="saveid" value="default">
+                        <card-button @click.prevent.native="saveprofile('default', 'timetablecreate')" label="Сохранить"></card-button>
                         <card-button @click.prevent.native="adminprofile" class="second-card-button" label="Отменить"></card-button>
                     </form>
                 </simple-card>

@@ -278,7 +278,6 @@ class FetchPageControllerKt {
         else query("updateShop", data)
     }
     private fun adminSaveTimetable(data: String){
-        println(data)
         if (data.jsonString("saveid") == "default")
             query("insertTimetable", data)
         else query("updateTimetable", data)

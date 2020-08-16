@@ -31,7 +31,7 @@ export function createData(formId = 'default', startObject = {}){
     return object;
 }
 
-export function fetchPage(page, formId = 'default', startObject = {}, nextMethod = (function(){}) ){
+export function fetchPage(page, formId = 'default', startObject = {}, nextMethod = (function(){}), setPage = 'default'){
     swipe(() => {
         fetch(page, {
             method: 'POST',
@@ -39,9 +39,9 @@ export function fetchPage(page, formId = 'default', startObject = {}, nextMethod
         })
         .then(data => data.json())
         .then(data => window.content.data = data)
-        .then(data => window.content.site = page)
+        .then(data => window.content.site = (setPage === 'default' ? page : setPage))
+        .then(setTimeout(nextMethod, 10))
         .catch(error => {});
-        setTimeout(nextMethod, 0);
     })
 }
 
