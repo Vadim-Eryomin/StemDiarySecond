@@ -43,7 +43,7 @@ export function fetchPage(page, formId = 'default', startObject = {}, nextMethod
             window.test = data;
             return data;
         })
-        .then(data => data.text())
+        .then(data => data.json())
         .then(data => {
             window.test1 = data;
             return data;
