@@ -39,12 +39,10 @@ export function fetchPage(page, formId = 'default', startObject = {}, nextMethod
             body: JSON.stringify(obj)
         })
         .then(data => {
-            window.test = data;
             return data;
         })
         .then(data => data.json())
         .then(data => {
-            window.test1 = data;
             return data;
         })
         .then(data => window.content.data = data)
