@@ -23,13 +23,13 @@ export default new Vue({
             fetchPage('auth', 'loginForm', null, () => {
             //можно оптимизировать, создав объект
                 if(!window.content.data.auth) return;
-                this.id = data.id;
-                this.login = data.login;
-                this.password = loginForm['password'].value;
-                this.img = data.img;
-                this.name = data.name;
-                this.surname = data.surname;
-                this.isAuth = true;
+                window.content.id = data.id;
+                window.content.login = data.login;
+                window.content.password = loginForm['password'].value;
+                window.content.img = data.img;
+                window.content.name = data.name;
+                window.content.surname = data.surname;
+                window.content.isAuth = true;
                 document.cookie = "login="+(data.login);
                 document.cookie = "password="+(data.password);
             })
