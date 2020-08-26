@@ -22,7 +22,7 @@ export default new Vue({
         auth: function(){
             fetchPage('auth', 'loginForm', null, () => {
             //можно оптимизировать, создав объект
-                if(!data.auth) return;
+                if(!window.content.data.auth) return;
                 this.id = data.id;
                 this.login = data.login;
                 this.password = loginForm['password'].value;
