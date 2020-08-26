@@ -10,6 +10,11 @@ public class Database {
     public static String connector = "jdbc:postgresql://ec2-54-247-103-43.eu-west-1.compute.amazonaws.com:5432/d4c70f7efoa6fc";
     public static String login = "hvrywehkzbxgro";
     public static String password = "1d549513c6fb0ff2d7f67f26acf1bc116182efd84805237635d4288a197e5c50";
+
+//    public static String connector = "jdbc:postgresql://localhost:5432/stem";
+//    public static String login = "postgres";
+//    public static String password = "1";
+
     public static Connection connection;
 
     public static void connect() throws SQLException, IOException {

@@ -15,10 +15,8 @@ class FetchPageControllerKt {
     private val defaultHomework: String = "nothing"
 
     @PostMapping("/auth")
-    fun auth(@RequestBody data: String) {
-        println(data)
+    fun auth(@RequestBody data: String) =
         query("auth", data).jsonStringFirst()
-    }
 
     @PostMapping("/shop")
     fun shop(@RequestBody data: String) =
@@ -243,11 +241,11 @@ class FetchPageControllerKt {
     }
     private fun ResultSet.jsonStringFirst(): String {
         val meta = this.metaData
-        next()
         val obj = JSONObject()
-        for (i in 1..meta.columnCount)
+        this.next()
+        for (i in 1..meta.columnCount) {
             obj.put(meta.getColumnLabel(i), this.getObject(meta.getColumnLabel(i)))
-
+        }
         return obj.toString();
     }
     private fun ResultSet.jsonFirst(): JSONObject {

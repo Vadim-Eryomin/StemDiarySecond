@@ -31,13 +31,13 @@
 
 <div id="content">
     <template v-if="isAuth === false">
-        <form id="loginForm" @submit.prevent>
-            <simple-card key="loginCard">
+        <simple-card key="loginCard">
+            <form id="loginForm" @submit.prevent>
                 <card-input key="login" name="login" label="Логин"></card-input>
                 <card-input key="password" name="password" label="Пароль" type="password"></card-input>
                 <card-button @click.native="auth" label="Войти"></card-button>
-            </simple-card>
-        </form>
+            </form>
+        </simple-card>
     </template>
     <template v-else>
         <template v-if="site==='profile'">

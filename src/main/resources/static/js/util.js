@@ -14,7 +14,6 @@ export function createData(formId = 'default', startObject = {}){
     if(formId != 'default' && formId != null){
         let form = document.getElementById(formId);
         let names = new Set();
-
         for(let i = 0; i < form.elements.length; i++){
             let input = form.elements[i];
             if(!(input.type == 'button' || input.tagName == 'BUTTON'))
@@ -22,26 +21,38 @@ export function createData(formId = 'default', startObject = {}){
         }
         names.forEach(name => object[name] = form[name].value)
     }
+    if(object.login == null || object.login == ''){
+        object.login = content.login;
+        object.password = content.password;
+        object.id = content.id;
+    }
 
-    object.login = content.login;
-    object.password = content.password;
-    object.id = content.id;
     Object.assign(object, startObject);
-
     return object;
 }
 
 export function fetchPage(page, formId = 'default', startObject = {}, nextMethod = (function(){}), setPage = 'default'){
     swipe(() => {
+        let obj = createData(formId, startObject);
+        debugger;
         fetch(page, {
             method: 'POST',
-            body: JSON.stringify(createData(formId, startObject))
+            body: JSON.stringify(obj)
         })
-        .then(data => data.json())
+        .then(data => {
+            window.test = data;
+            return data;
+        })
+        .then(data => data.text())
+        .then(data => {
+            window.test1 = data;
+            return data;
+        })
         .then(data => window.content.data = data)
         .then(data => window.content.site = (setPage === 'default' ? page : setPage))
         .then(setTimeout(nextMethod, 10))
         .catch(error => {});
+        debugger;
     })
 }
 
