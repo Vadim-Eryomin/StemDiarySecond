@@ -14,10 +14,6 @@ public class Database {
 
     public static void connect() throws SQLException, IOException {
         connection = DriverManager.getConnection(connector, login, password);
-        FileWriter writer = new FileWriter("writer.txt");
-        writer.append("db is ok!");
-        writer.flush();
-        writer.close();
     }
 
     public static ResultSet query(String query) throws Exception {

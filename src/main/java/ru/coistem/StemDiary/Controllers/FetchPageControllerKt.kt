@@ -15,7 +15,10 @@ class FetchPageControllerKt {
     private val defaultHomework: String = "nothing"
 
     @PostMapping("/auth")
-    fun auth(@RequestBody data: String) = query("auth", data).jsonStringFirst()
+    fun auth(@RequestBody data: String) {
+        println(data)
+        query("auth", data).jsonStringFirst()
+    }
 
     @PostMapping("/shop")
     fun shop(@RequestBody data: String) =
@@ -161,7 +164,7 @@ class FetchPageControllerKt {
         return Database.query(when (method) {
             "checkAuth"         -> "SELECT * FROM login WHERE login = '${data.jsonString("login")}' and password = '${data.jsonString("password")}'"
             "role"              -> "SELECT role.admin, role.teacher FROM role JOIN login on login.id = role.id WHERE login.login = '${data.jsonString("login")}' and login.password = '${data.jsonString("password")}'"
-            "auth"              -> "SELECT *, 't' as auth FROM login JOIN profile on login.id = profile.id WHERE login.login = '${data.jsonString("login")}' and password = '${data.jsonString("password")}'"
+            "auth"              -> "SELECT *, 't' as auth FROM login JOIN profile on login.id = profile.id WHERE login.login = '${data.jsonString("login")}' and login.password = '${data.jsonString("password")}'"
             "shop"              -> "SELECT * FROM product"
             "timetableAdmin"    -> "SELECT course.id as id, course.name as course, course.img as courseimg, profile.name, profile.surname, profile.img as teacherimg FROM course JOIN profile ON profile.id = course.teacher"
             "timetableTeacher"  -> "SELECT course.id as id, course.name as course, course.img as courseimg, profile.name, profile.surname, profile.img as teacherimg FROM course JOIN profile ON profile.id = course.teacher WHERE teacher = " + data.jsonString("id")
